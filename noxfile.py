@@ -63,6 +63,9 @@ REPO_ROOT = pathlib.Path(os.path.dirname(__file__)).resolve()
 SITECUSTOMIZE_DIR = str(REPO_ROOT / "tests" / "support" / "coverage")
 ARTIFACTS_DIR = REPO_ROOT / "artifacts"
 COVERAGE_OUTPUT_DIR = ARTIFACTS_DIR / "coverage"
+COVERAGE_FILE = os.environ.get("COVERAGE_FILE")
+if COVERAGE_FILE is None:
+    COVERAGE_FILE = str(COVERAGE_OUTPUT_DIR / ".coverage")
 IS_DARWIN = sys.platform.lower().startswith("darwin")
 IS_WINDOWS = sys.platform.lower().startswith("win")
 IS_FREEBSD = sys.platform.lower().startswith("freebsd")
@@ -353,7 +356,7 @@ def _run_with_coverage(session, *test_cmd, env=None):
     coverage_base_env = {
         # The full path to the .coverage data file. Makes sure we always write
         # them to the same directory
-        "COVERAGE_FILE": str(COVERAGE_OUTPUT_DIR / ".coverage")
+        "COVERAGE_FILE": COVERAGE_FILE,
     }
     if env is None:
         env = {}
@@ -406,7 +409,7 @@ def _report_coverage(session):
     env = {
         # The full path to the .coverage data file. Makes sure we always write
         # them to the same directory
-        "COVERAGE_FILE": str(COVERAGE_OUTPUT_DIR / ".coverage"),
+        "COVERAGE_FILE": COVERAGE_FILE,
     }
 
     report_section = None
@@ -1127,7 +1130,7 @@ def combine_coverage(session):
     env = {
         # The full path to the .coverage data file. Makes sure we always write
         # them to the same directory
-        "COVERAGE_FILE": str(COVERAGE_OUTPUT_DIR / ".coverage")
+        "COVERAGE_FILE": COVERAGE_FILE,
     }
 
     # Always combine and generate the XML coverage report

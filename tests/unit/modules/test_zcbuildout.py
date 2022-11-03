@@ -247,7 +247,7 @@ class BuildoutTestCase(Base):
             buildout._get_bootstrap_content(os.path.join(self.tdir, "var", "tb", "1")),
         )
         self.assertEqual(
-            "foo{}".format(os.linesep),
+            "foo\n",
             buildout._get_bootstrap_content(os.path.join(self.tdir, "var", "tb", "2")),
         )
 

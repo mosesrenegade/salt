@@ -55,6 +55,9 @@ jobs:
       - name: Start VM
         if: steps.nox-dependencies-cache.outputs.cache-hit != 'true'
         id: spin-up-vm
+        env:
+          AWS_MAX_ATTEMPTS: "10"
+          AWS_RETRY_MODE: "adaptive"
         run: |
           tools --timestamps vm create --destroy-on-failure ${{ inputs.distro-slug }}
 
@@ -142,6 +145,8 @@ jobs:
         id: spin-up-vm
         env:
           TESTS_CHUNK: ${{ matrix.tests-chunk }}
+          AWS_MAX_ATTEMPTS: "10"
+          AWS_RETRY_MODE: "adaptive"
         run: |
           tools --timestamps vm create --destroy-on-failure ${{ inputs.distro-slug }}
 

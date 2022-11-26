@@ -1,0 +1,156 @@
+{
+  "almalinux-8": {
+    "ami": "ami-0af3d78ace99f4bb7",
+    "ssh_username": "ec2-user",
+    "description": "CI Image of AlmaLinux 8 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "almalinux-9": {
+    "ami": "ami-01d7c41a8c01090bf",
+    "ssh_username": "ec2-user",
+    "description": "CI Image of AlmaLinux 9 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "amazonlinux-2": {
+    "ami": "ami-0318c86a40d545b30",
+    "ssh_username": "ec2-user",
+    "description": "CI Image of AmazonLinux 2 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "archlinux-lts": {
+    "ami": "ami-099025df74023a3c6",
+    "ssh_username": "arch",
+    "description": "CI Image of ArchLinux lts x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "centos-7": {
+    "ami": "ami-0d123bd03504fe72c",
+    "ssh_username": "centos",
+    "description": "CI Image of CentOS 7 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "centosstream-8": {
+    "ami": "ami-06a27ec5f6d7b95bf",
+    "ssh_username": "cloud-user",
+    "description": "CI Image of CentOSStream 8 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "centosstream-9": {
+    "ami": "ami-0fa844d81f7dd1e7d",
+    "ssh_username": "ec2-user",
+    "description": "CI Image of CentOSStream 9 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "debian-10": {
+    "ami": "ami-00e07241dbf6c43ec",
+    "ssh_username": "admin",
+    "description": "CI Image of Debian 10 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "debian-11-arm64": {
+    "ami": "ami-0d814ac854c3182d3",
+    "ssh_username": "admin",
+    "description": "CI Image of Debian 11 arm64",
+    "instance_type": "m6g.large",
+    "is_windows": "false"
+  },
+  "debian-11": {
+    "ami": "ami-01bd9d725a7004b20",
+    "ssh_username": "admin",
+    "description": "CI Image of Debian 11 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "fedora-36": {
+    "ami": "ami-0e7fd6df82a2ad874",
+    "ssh_username": "fedora",
+    "description": "CI Image of Fedora 36 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "opensuse-15": {
+    "ami": "ami-059d9cf782728b17b",
+    "ssh_username": "ec2-user",
+    "description": "CI Image of Opensuse 15 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "photonos-3": {
+    "ami": "ami-03472a19a813b1e3c",
+    "ssh_username": "root",
+    "description": "CI Image of PhotonOS 3 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "photonos-4": {
+    "ami": "ami-08bec73a3c48cfd75",
+    "ssh_username": "root",
+    "description": "CI Image of PhotonOS 4 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "ubuntu-18.04": {
+    "ami": "ami-040b628a4a30cef4f",
+    "ssh_username": "ubuntu",
+    "description": "CI Image of Ubuntu 18.04 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "ubuntu-20.04-arm64": {
+    "ami": "ami-00b1a478ac458d66e",
+    "ssh_username": "ubuntu",
+    "description": "CI Image of Ubuntu 20.04 arm64",
+    "instance_type": "m6g.large",
+    "is_windows": "false"
+  },
+  "ubuntu-20.04": {
+    "ami": "ami-0ed441b4e103b7ab6",
+    "ssh_username": "ubuntu",
+    "description": "CI Image of Ubuntu 20.04 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "ubuntu-22.04-arm64": {
+    "ami": "ami-0bf1a01d081c2d218",
+    "ssh_username": "ubuntu",
+    "description": "CI Image of Ubuntu 22.04 arm64",
+    "instance_type": "m6g.large",
+    "is_windows": "false"
+  },
+  "ubuntu-22.04": {
+    "ami": "ami-0995f113dc8ed1b3e",
+    "ssh_username": "ubuntu",
+    "description": "CI Image of Ubuntu 22.04 x86_64",
+    "instance_type": "t3a.large",
+    "is_windows": "false"
+  },
+  "windows-2016": {
+    "ami": "ami-03639c9f8505db6b1",
+    "ssh_username": "Administrator",
+    "description": "CI Image of Windows 2016 x86_64",
+    "instance_type": "t3a.xlarge",
+    "is_windows": "true"
+  },
+  "windows-2019": {
+    "ami": "ami-0d29b627913a61098",
+    "ssh_username": "Administrator",
+    "description": "CI Image of Windows 2019 x86_64",
+    "instance_type": "t3a.xlarge",
+    "is_windows": "true"
+  },
+  "windows-2022": {
+    "ami": "ami-0c1001ada5c563d95",
+    "ssh_username": "Administrator",
+    "description": "CI Image of Windows 2022 x86_64",
+    "instance_type": "t3a.xlarge",
+    "is_windows": "true"
+  }
+}

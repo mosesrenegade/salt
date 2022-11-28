@@ -1,0 +1,69 @@
+---
+name: build-linux-onedir
+description: Build Linux Onedir Package
+inputs:
+  platform:
+    required: true
+    type: string
+    description: The platform to build
+  arch:
+    required: true
+    type: string
+    description: The platform arch to build
+  package-name:
+    required: false
+    type: string
+    description: The onedir package name to create
+    default: salt-pkg
+
+runs:
+  using: composite
+
+  steps:
+
+    - name: Download Onedir Tarball as an Artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+
+    - name: Decompress Onedir Tarball
+      shell: bash
+      run: |
+        tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+
+    - name: Create Onedir Directory
+      shell: bash
+      run: |
+        ${{ inputs.package-name }}/bin/python3 -m relenv create --arch=${{ inputs.arch }} ${{ inputs.package-name }}-ci
+
+    - name: Install Salt Into Onedir
+      shell: bash
+      run: |
+        ${{ inputs.package-name }}-ci/bin/python3 -m pip install -r requirements/static/ci/py3.10/${{ inputs.platform }}.txt
+
+    - name: Create Tarball
+      shell: bash
+      run: |
+        tar -cJf ${{ inputs.package-name }}-ci-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz  ${{ inputs.package-name }}-ci
+
+    - name: Upload Onedir Tarball as an Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: onedir-${{ inputs.platform }}-ci-package
+        path: ${{ inputs.package-name }}-ci-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+        retention-days: 7
+
+    - name: Set Exit Status
+      if: always()
+      shell: bash
+      run: |
+        mkdir exitstatus
+        echo "${{ job.status }}" > exitstatus/${{ github.job }}-build-onedir-ci-${{ inputs.platform }}-${{ inputs.arch }}
+
+    - name: Upload Exit Status
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: exitstatus
+        path: exitstatus
+        if-no-files-found: error

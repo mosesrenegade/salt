@@ -1,0 +1,103 @@
+---
+name: build-linux-onedir
+description: Build Linux Onedir Package
+inputs:
+  platform:
+    required: true
+    type: string
+    description: The platform to build
+  arch:
+    required: true
+    type: string
+    description: The platform arch to build
+  package-name:
+    required: false
+    type: string
+    description: The onedir package name to create
+    default: salt-pkg
+
+runs:
+  using: composite
+
+  steps:
+
+    - name: Set up Python 3.10
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.10"
+
+    - name: Install Relenv
+      shell: bash
+      run: |
+        python3 -m pip install relenv
+
+    - name: Set environment variables
+      shell: bash
+      run: |
+        mkdir -p .relenv
+        echo RELENV_DATA="$(pwd)/.relenv" >> $GITHUB_ENV
+        echo RELENV_VERSION="$(python3 -m pip show relenv | grep Version | cut -d ' ' -f2)" >> $GITHUB_ENV
+
+    - name: Fetch Toolchain
+      if: ${{ inputs.platform == 'linux' }}
+      shell: bash
+      run: |
+        python3 -m relenv toolchain fetch --arch=${{ inputs.arch }}
+
+    - name: Fetch Native Build
+      shell: bash
+      run: |
+        python3 -m relenv fetch --arch=${{ inputs.arch }}
+
+    - name: Cache Onedir Package Directory
+      id: onedir-pkg-cache
+      uses: actions/cache@v3
+      with:
+        path: artifacts/${{ inputs.package-name }}
+        key: relenv|${{ env.RELENV_VERSION }}|pkg|${{ inputs.package-name }}|${{ hashFiles('.relenv/**/*.xz') }}
+
+    - name: Create Onedir Directory
+      shell: bash
+      if: steps.onedir-pkg-cache.outpus.cache-hit != 'true'
+      run: |
+        mkdir -p artifacts
+        python3 -m relenv create --arch=${{ inputs.arch }} artifacts/${{ inputs.package-name }}
+
+    - name: Install Salt Into Onedir
+      env:
+        USE_STATIC_REQUIREMENTS: "1"
+      shell: bash
+      run: |
+        if [ "${{ inputs.platform }}" != "windows" ]; then
+          artifacts/${{ inputs.package-name }}/bin/python3 -m pip install .
+        else
+          artifacts/${{ inputs.package-name }}/Scripts/python -m pip install .
+        fi
+
+    - name: Create Tarball
+      shell: bash
+      run: |
+        cd artifacts/
+        tar -cJf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz  ${{ inputs.package-name }}
+
+    - name: Upload Onedir Tarball as an Artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+        path: artifacts/${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+        retention-days: 7
+
+    - name: Set Exit Status
+      if: always()
+      shell: bash
+      run: |
+        mkdir exitstatus
+        echo "${{ job.status }}" > exitstatus/${{ github.job }}-build-onedir-${{ inputs.platform }}-${{ inputs.arch }}
+
+    - name: Upload Exit Status
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: exitstatus
+        path: exitstatus
+        if-no-files-found: error

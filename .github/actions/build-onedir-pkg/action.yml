@@ -14,7 +14,7 @@ inputs:
     required: false
     type: string
     description: The onedir package name to create
-    default: salt-pkg
+    default: salt
 
 runs:
   using: composite

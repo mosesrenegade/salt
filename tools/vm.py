@@ -869,6 +869,8 @@ class VM:
             f"{STATE_DIR.relative_to(REPO_ROOT)}{os.path.sep}",
             "--exclude",
             "*.py~",
+            "--include",
+            "artifacts/salt/*",
         ]
         if self.is_windows:
             # Symlinks aren't handled properly on windows, just replace the

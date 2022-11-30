@@ -466,8 +466,10 @@ ipaddress==1.0.23
     # via kubernetes
 isodate==0.6.0
     # via msrest
-isort==4.3.17
-    # via pylint
+isort==4.3.21
+    # via
+    #   -r requirements/static/ci/lint.in
+    #   pylint
 jaraco.classes==3.2.1
     # via jaraco.collections
 jaraco.collections==3.4.0

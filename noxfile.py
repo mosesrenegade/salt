@@ -1171,10 +1171,11 @@ def decompress_dependencies(session):
             "Check cicd/images.yml for what's available."
         )
     distro_slug = session.posargs.pop(0)
+    transport = session.posargs.pop(0)
     if IS_WINDOWS:
-        nox_dependencies_tarball = f"nox.{distro_slug}.tar.gz"
+        nox_dependencies_tarball = f"nox.{distro_slug}.{transport}.tar.gz"
     else:
-        nox_dependencies_tarball = f"nox.{distro_slug}.tar.xz"
+        nox_dependencies_tarball = f"nox.{distro_slug}.{transport}.tar.xz"
     nox_dependencies_tarball_path = REPO_ROOT / nox_dependencies_tarball
     if not nox_dependencies_tarball_path.exists():
         session.error(
@@ -1194,10 +1195,11 @@ def compress_dependencies(session):
             "Check cicd/images.yml for what's available."
         )
     distro_slug = session.posargs.pop(0)
+    transport = session.posargs.pop(0)
     if IS_WINDOWS:
-        nox_dependencies_tarball = f"nox.{distro_slug}.tar.gz"
+        nox_dependencies_tarball = f"nox.{distro_slug}.{transport}.tar.gz"
     else:
-        nox_dependencies_tarball = f"nox.{distro_slug}.tar.xz"
+        nox_dependencies_tarball = f"nox.{distro_slug}.{transport}.tar.xz"
     nox_dependencies_tarball_path = REPO_ROOT / nox_dependencies_tarball
     if nox_dependencies_tarball_path.exists():
         session_warn(

@@ -173,6 +173,14 @@ jobs:
         with:
           path: nox.${{ inputs.distro-slug }}.tar.*
           key: testrun-deps|${{ inputs.distro-slug }}|${{ inputs.nox-session }}|${{ matrix.transport }}|${{ hashFiles('requirements/**/*.txt', 'cicd/golden-images.json') }}
+        fi
+
+    - name: Cache nox.${{ inputs.platform }}.tar.* for session ${{ inputs.nox-session }}
+      id: nox-dependencies-cache
+      uses: actions/cache@v3
+      with:
+        path: nox.${{ inputs.platform }}.${{ inputs.transport }}.tar.*
+        key: testrun-deps|${{ inputs.platform }}|${{ inputs.nox-session }}|${{ inputs.transport }}|${{ inputs.python-version }}|${{ hashFiles('requirements/**/*.txt') }}
 
       - name: PyPi Proxy
         run: |

@@ -1,7 +1,12 @@
-name: Test Artifact
+name: Install CI Dependencies
 
 on:
-  - workflow_call
+  workflow_call:
+    inputs:
+      nox-session:
+        required: true
+        type: string
+        description: The nox session to run
 
 jobs:
 
@@ -13,6 +18,9 @@ jobs:
         arch:
           - x86_64
           - aarch64
+        transport:
+          - zeromq
+          - tcp
     runs-on:
       - self-hosted
       - linux
@@ -23,10 +31,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
+      - uses: ./.github/actions/install-ci-dependencies
         with:
           platform: linux
           arch: ${{ matrix.arch }}
+          nox-session: ${{ inputs.nox-session }}
 
       - name: Set Exit Status
         if: always()
@@ -56,10 +65,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
+      - uses: ./.github/actions/install-ci-dependencies
         with:
           platform: windows
           arch: ${{ matrix.arch }}
+          nox-session: ${{ inputs.nox-session }}
 
       - name: Set Exit Status
         if: always()
@@ -89,10 +99,11 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
+      - uses: ./.github/actions/install-ci-dependencies
         with:
           platform: darwin
           arch: ${{ matrix.arch }}
+          nox-session: ${{ inputs.nox-session }}
 
       - name: Set Exit Status
         if: always()

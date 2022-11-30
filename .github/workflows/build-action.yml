@@ -31,7 +31,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          mkdir exitstatus
+          mkdir -p exitstatus
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-linux-${{ matrix.arch }}
 
       - name: Upload Exit Status
@@ -64,7 +64,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          mkdir exitstatus
+          mkdir -p exitstatus
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-windows-${{ matrix.arch }}
 
       - name: Upload Exit Status
@@ -97,7 +97,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          mkdir exitstatus
+          mkdir -p exitstatus
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-macos-${{ matrix.arch }}
 
       - name: Upload Exit Status

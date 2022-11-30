@@ -81,18 +81,3 @@ runs:
         name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
         path: artifacts/${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
         retention-days: 7
-
-    - name: Set Exit Status
-      if: always()
-      shell: bash
-      run: |
-        mkdir exitstatus
-        echo "${{ job.status }}" > exitstatus/${{ github.job }}-build-onedir-${{ inputs.platform }}-${{ inputs.arch }}
-
-    - name: Upload Exit Status
-      if: always()
-      uses: actions/upload-artifact@v3
-      with:
-        name: exitstatus
-        path: exitstatus
-        if-no-files-found: error

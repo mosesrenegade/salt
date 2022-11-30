@@ -19,7 +19,20 @@ on:
         required: false
         type: string
         description: The python version to run tests with
-        default: 3.9
+        default: "3.9"
+      platform:
+        required: true
+        type: string
+        description: The platform being tested
+      arch:
+        required: true
+        type: string
+        description: The platform arch being tested
+      package-name:
+        required: false
+        type: string
+        description: The onedir package name to use
+        default: salt
 
 
 env:
@@ -75,6 +88,19 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
+      - name: Download Onedir Tarball as an Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+          path: artifacts/${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+
+      - name: Decompress Onedir Tarball
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          cd artifacts
+          tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+
       - name: Cache nox.${{ inputs.distro-slug }}.tar.* for session ${{ inputs.nox-session }}
         id: nox-dependencies-cache
         uses: actions/cache@v3
@@ -106,9 +132,9 @@ jobs:
         if: steps.nox-dependencies-cache.outputs.cache-hit != 'true'
         run: |
           if [ "${{ matrix.transport }}" != "tcp" ]; then
-            echo NOX_SESSION=${{ inputs.nox-session}}-3 >> $GITHUB_ENV
+            echo NOX_SESSION=${{ inputs.nox-session}} >> $GITHUB_ENV
           else
-            echo NOX_SESSION=${{ inputs.nox-session}}-tcp-3 >> $GITHUB_ENV
+            echo NOX_SESSION=${{ inputs.nox-session}}-tcp >> $GITHUB_ENV
           fi
 
       - name: Install Dependencies
@@ -160,6 +186,19 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
+      - name: Download Onedir Tarball as an Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+          path: artifacts/${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+
+      - name: Decompress Onedir Tarball
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          cd artifacts
+          tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+
       - name: Install System Dependencies
         if: steps.nox-dependencies-cache.outputs.cache-hit != 'true'
         run: |
@@ -187,9 +226,9 @@ jobs:
       - name: Define Nox Session
         run: |
           if [ "${{ matrix.transport }}" != "tcp" ]; then
-            echo NOX_SESSION=${{ inputs.nox-session}}-3 >> $GITHUB_ENV
+            echo NOX_SESSION=${{ inputs.nox-session}} >> $GITHUB_ENV
           else
-            echo NOX_SESSION=${{ inputs.nox-session}}-tcp-3 >> $GITHUB_ENV
+            echo NOX_SESSION=${{ inputs.nox-session}}-tcp >> $GITHUB_ENV
           fi
 
       - name: Run Tests
@@ -279,9 +318,9 @@ jobs:
       - name: Define Nox Session
         run: |
           if [ "${{ matrix.transport }}" != "tcp" ]; then
-            echo NOX_SESSION=${{ inputs.nox-session}}-3 >> $GITHUB_ENV
+            echo NOX_SESSION=${{ inputs.nox-session}} >> $GITHUB_ENV
           else
-            echo NOX_SESSION=${{ inputs.nox-session}}-tcp-3 >> $GITHUB_ENV
+            echo NOX_SESSION=${{ inputs.nox-session}}-tcp >> $GITHUB_ENV
           fi
 
       - name: Download Test Run Artifacts

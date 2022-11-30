@@ -1,4 +1,4 @@
-name: Build Onedir
+name: Test Artifact
 
 on:
   - workflow_call

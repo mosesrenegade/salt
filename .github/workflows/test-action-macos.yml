@@ -97,7 +97,7 @@ jobs:
       - name: Decompress Onedir Tarball
         shell: bash
         run: |
-          mkdir -p artifacts
+          mkdir -p artifacts || true
           cd artifacts
           tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 
@@ -195,7 +195,7 @@ jobs:
       - name: Decompress Onedir Tarball
         shell: bash
         run: |
-          mkdir -p artifacts
+          mkdir -p artifacts || true
           cd artifacts
           tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 

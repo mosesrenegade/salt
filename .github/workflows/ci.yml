@@ -79,151 +79,21 @@ jobs:
     with:
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
-  build-linux-x86_64-onedir:
-    name: Build Linux x86_64 Onedir Package
-    needs:
-      - get-changed-files
-    runs-on:
-      - self-hosted
-      - linux
-      - x86_64
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
-        with:
-          platform: linux
-          arch: x86_64
+  build:
+    name: Build Onedir
+    uses: ./.github/workflows/build-action.yml
 
-  build-linux-ci-x86_64-onedir:
-    name: Build Linux CI x86_64 Onedir Package
+  dependencies:
+    name: Install Test Dependencies
+    uses: ./.github/workflows/build-action.yml
     needs:
-      - build-linux-x86_64-onedir
-    runs-on:
-      - self-hosted
-      - linux
-      - x86_64
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-ci-pkg
-        with:
-          platform: linux
-          arch: x86_64
-
-  build-linux-aarch64-onedir:
-    name: Build Linux aarch64 Onedir Package
-    needs:
-      - get-changed-files
-    runs-on:
-      - self-hosted
-      - linux
-      - aarch64
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
-        with:
-          platform: linux
-          arch: aarch64
-
-  build-linux-ci-aarch64-onedir:
-    name: Build Linux CI aarch64 Onedir Package
-    needs:
-      - build-linux-aarch64-onedir
-    runs-on:
-      - self-hosted
-      - linux
-      - aarch64
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-ci-pkg
-        with:
-          platform: linux
-          arch: aarch64
-
-  build-windows-amd64-onedir:
-    name: Build Windows x86_64 Onedir Package
-    needs:
-      - get-changed-files
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
-        with:
-          platform: windows
-          arch: amd64
-
-  build-windows-ci-amd64-onedir:
-    name: Build Windows x86_64 Onedir Package
-    needs:
-      - build-windows-amd64-onedir
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-ci-pkg
-        with:
-          platform: windows
-          arch: amd64
-
-  build-macos-x86_64-onedir:
-    name: Build macOS x86_64 Onedir Package
-    needs:
-      - get-changed-files
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
-        with:
-          platform: darwin
-          arch: x86_64
-
-  build-macos-ci-x86_64-onedir:
-    name: Build macOS CI x86_64 Onedir Package
-    needs:
-      - build-macos-x86_64-onedir
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.10
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-ci-pkg
-        with:
-          platform: darwin
-          arch: x86_64
+      - build
 
   windows-2016:
     name: Windows 2016
     needs:
       - get-changed-files
-      - build-windows-ci-amd64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: windows-2016
@@ -234,7 +104,7 @@ jobs:
     name: Windows 2019
     needs:
       - get-changed-files
-      - build-windows-ci-amd64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: windows-2019
@@ -245,7 +115,7 @@ jobs:
     name: Windows 2022
     needs:
       - get-changed-files
-      - build-windows-ci-amd64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: windows-2022
@@ -256,7 +126,7 @@ jobs:
     name: MacOS 12
     needs:
       - get-changed-files
-      - build-macos-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action-macos.yml
     with:
       distro-slug: macos-12
@@ -267,7 +137,7 @@ jobs:
     name: Alma Linux 8
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: almalinux-8
@@ -278,7 +148,7 @@ jobs:
     name: Alma Linux 9
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: almalinux-9
@@ -289,7 +159,7 @@ jobs:
     name: Amazon Linux 2
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: amazonlinux-2
@@ -300,7 +170,7 @@ jobs:
     name: Arch Linux LTS
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: archlinux-lts
@@ -311,7 +181,7 @@ jobs:
     name: CentOS 7
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: centos-7
@@ -322,7 +192,7 @@ jobs:
     name: CentOS Stream 8
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: centosstream-8
@@ -333,7 +203,7 @@ jobs:
     name: CentOS Stream 9
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: centosstream-9
@@ -344,7 +214,7 @@ jobs:
     name: Debian 10
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: debian-10
@@ -355,7 +225,7 @@ jobs:
     name: Debian 11
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: debian-11
@@ -366,7 +236,7 @@ jobs:
     name: Debian 11 Arm64
     needs:
       - get-changed-files
-      - build-linux-ci-aarch64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: debian-11-arm64
@@ -377,7 +247,7 @@ jobs:
     name: Fedora 36
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: fedora-36
@@ -388,7 +258,7 @@ jobs:
     name: Opensuse 15
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: opensuse-15
@@ -399,7 +269,7 @@ jobs:
     name: Photon OS 3
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: photonos-3
@@ -410,7 +280,7 @@ jobs:
     name: Photon OS 4
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: photonos-4
@@ -421,7 +291,7 @@ jobs:
     name: Ubuntu 18.04
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: ubuntu-18.04
@@ -432,7 +302,7 @@ jobs:
     name: Ubuntu 20.04
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: ubuntu-20.04
@@ -443,7 +313,7 @@ jobs:
     name: Ubuntu 20.04 Arm64
     needs:
       - get-changed-files
-      - build-linux-ci-aarch64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: ubuntu-20.04-arm64
@@ -454,7 +324,7 @@ jobs:
     name: Ubuntu 22.04
     needs:
       - get-changed-files
-      - build-linux-ci-x86_64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: ubuntu-22.04
@@ -465,7 +335,7 @@ jobs:
     name: Ubuntu 22.04 Arm64
     needs:
       - get-changed-files
-      - build-linux-ci-aarch64-onedir
+      - dependencies
     uses: ./.github/workflows/test-action.yml
     with:
       distro-slug: ubuntu-22.04-arm64

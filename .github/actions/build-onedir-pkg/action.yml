@@ -55,7 +55,7 @@ runs:
 
     - name: Create Onedir Directory
       shell: bash
-      if: steps.onedir-pkg-cache.outpus.cache-hit != 'true'
+      if: steps.onedir-pkg-cache.outputs.cache-hit != 'true'
       run: |
         if [ ! -d artifacts ]; then
           mkdir artifacts

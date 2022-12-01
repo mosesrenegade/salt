@@ -79,9 +79,15 @@ jobs:
     with:
       changed-files: ${{ needs.get-changed-files.outputs.changed-files }}
 
+  build-bare:
+    name: Build Bare Onedir
+    uses: ./.github/workflows/build-bare-action.yml
+
   build:
-    name: Build Onedir
-    uses: ./.github/workflows/build-action.yml
+    name: Build Salt Onedir
+    needs:
+      - build-bare
+    uses: ./.github/workflows/build-salt-action.yml
 
   windows-2016:
     name: Windows 2016

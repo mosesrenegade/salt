@@ -31,9 +31,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          if [ ! -d exitstatus ]; then
-            mkdir exitstatus
-          fi
+          python3 -c "import os; os.makedirs('exitstatus', exist_ok=True)"
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-linux-${{ matrix.arch }}
 
       - name: Upload Exit Status
@@ -66,9 +64,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          if [ ! -d exitstatus ]; then
-            mkdir exitstatus
-          fi
+          python3 -c "import os; os.makedirs('exitstatus', exist_ok=True)"
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-windows-${{ matrix.arch }}
 
       - name: Upload Exit Status
@@ -101,9 +97,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          if [ ! -d exitstatus ]; then
-            mkdir exitstatus
-          fi
+          python3 -c "import os; os.makedirs('exitstatus', exist_ok=True)"
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-macos-${{ matrix.arch }}
 
       - name: Upload Exit Status

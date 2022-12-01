@@ -93,9 +93,7 @@ jobs:
       - name: Decompress Onedir Tarball
         shell: bash
         run: |
-          if [ ! -d artifacts ]; then
-            mkdir artifacts
-          fi
+          python3 -c "import os; os.makedirs('artifacts', exist_ok=True)"
           cd artifacts
           tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 
@@ -166,9 +164,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          if [ ! -d exitstatus ]; then
-            mkdir exitstatus
-          fi
+          python3 -c "import os; os.makedirs('exitstatus', exist_ok=True)"
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-${{ inputs.distro-slug }}-deps
 
       - name: Upload Exit Status
@@ -207,9 +203,7 @@ jobs:
       - name: Decompress Onedir Tarball
         shell: bash
         run: |
-          if [ ! -d artifacts ]; then
-            mkdir artifacts
-          fi
+          python3 -c "import os; os.makedirs('artifacts', exist_ok=True)"
           cd artifacts
           tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 
@@ -317,9 +311,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          if [ ! -d exitstatus ]; then
-            mkdir exitstatus
-          fi
+          python3 -c "import os; os.makedirs('exitstatus', exist_ok=True)"
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-${{ inputs.distro-slug }}-${{ env.NOX_SESSION }}-${{ matrix.tests-chunk }}-tests
 
       - name: Upload Exit Status
@@ -406,9 +398,7 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          if [ ! -d exitstatus ]; then
-            mkdir exitstatus
-          fi
+          python3 -c "import os; os.makedirs('exitstatus', exist_ok=True)"
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-${{ inputs.distro-slug }}-${{ env.NOX_SESSION }}-report
 
       - name: Upload Exit Status

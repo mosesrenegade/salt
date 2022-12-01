@@ -29,9 +29,7 @@ runs:
     - name: Set environment variables
       shell: bash
       run: |
-        if [ ! -d .relenv ]; then
-          mkdir .relenv
-        fi
+        python3 -c "import os; os.makedirs('.relenv', exist_ok=True)"
         echo RELENV_DATA="$(pwd)/.relenv" >> $GITHUB_ENV
         echo RELENV_VERSION="$(python3 -m pip show relenv | grep Version | cut -d ' ' -f2)" >> $GITHUB_ENV
 
@@ -57,9 +55,7 @@ runs:
       shell: bash
       if: steps.onedir-pkg-cache.outputs.cache-hit != 'true'
       run: |
-        if [ ! -d artifacts ]; then
-          mkdir artifacts
-        fi
+        python3 -c "import os; os.makedirs('artifacts', exist_ok=True)"
         python3 -m relenv create --arch=${{ inputs.arch }} artifacts/${{ inputs.package-name }}
 
     - name: Install Salt Into Onedir

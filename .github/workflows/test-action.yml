@@ -93,7 +93,9 @@ jobs:
       - name: Decompress Onedir Tarball
         shell: bash
         run: |
-          mkdir -p artifacts || true
+          if [ ! -d artifacts ]; then
+            mkdir artifacts
+          fi
           cd artifacts
           tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 
@@ -164,7 +166,9 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          mkdir exitstatus
+          if [ ! -d exitstatus ]; then
+            mkdir exitstatus
+          fi
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-${{ inputs.distro-slug }}-deps
 
       - name: Upload Exit Status
@@ -203,7 +207,9 @@ jobs:
       - name: Decompress Onedir Tarball
         shell: bash
         run: |
-          mkdir -p artifacts || true
+          if [ ! -d artifacts ]; then
+            mkdir artifacts
+          fi
           cd artifacts
           tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 
@@ -311,7 +317,9 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          mkdir exitstatus
+          if [ ! -d exitstatus ]; then
+            mkdir exitstatus
+          fi
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-${{ inputs.distro-slug }}-${{ env.NOX_SESSION }}-${{ matrix.tests-chunk }}-tests
 
       - name: Upload Exit Status
@@ -398,7 +406,9 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          mkdir exitstatus
+          if [ ! -d exitstatus ]; then
+            mkdir exitstatus
+          fi
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-${{ inputs.distro-slug }}-${{ env.NOX_SESSION }}-report
 
       - name: Upload Exit Status

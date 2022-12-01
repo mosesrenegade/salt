@@ -60,7 +60,9 @@ jobs:
       - name: Set Exit Status
         if: always()
         run: |
-          mkdir exitstatus
+          if [ ! -d exitstatus ]; then
+            mkdir exitstatus
+          fi
           echo "${{ job.status }}" > exitstatus/${{ github.job }}-pre-commit
 
       - name: Upload Exit Status

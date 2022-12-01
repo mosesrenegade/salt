@@ -21,42 +21,19 @@ runs:
 
   steps:
 
-    - name: Install Relenv
-      shell: bash
-      run: |
-        python3 -m pip install relenv
+    - name: Download Cached Bare Onedir Package Directory
+      id: onedir-bare-cache
+      uses: actions/cache@v3
+      with:
+        path: artifacts/${{ inputs.package-name }}
+        key: relenv|${{ env.RELENV_VERSION }}|bare|${{ inputs.package-name }}|${{ hashFiles('.relenv/**/*.xz') }}
 
-    - name: Set environment variables
-      shell: bash
-      run: |
-        python3 -c "import os; os.makedirs('.relenv', exist_ok=True)"
-        echo RELENV_DATA="$(pwd)/.relenv" >> $GITHUB_ENV
-        echo RELENV_VERSION="$(python3 -m pip show relenv | grep Version | cut -d ' ' -f2)" >> $GITHUB_ENV
-
-    - name: Fetch Toolchain
-      if: ${{ inputs.platform == 'linux' }}
-      shell: bash
-      run: |
-        python3 -m relenv toolchain fetch --arch=${{ inputs.arch }}
-
-    - name: Fetch Native Build
-      shell: bash
-      run: |
-        python3 -m relenv fetch --arch=${{ inputs.arch }}
-
-    - name: Cache Onedir Package Directory
+    - name: Cached Salt Onedir Package Directory
       id: onedir-pkg-cache
       uses: actions/cache@v3
       with:
         path: artifacts/${{ inputs.package-name }}
-        key: relenv|${{ env.RELENV_VERSION }}|pkg|${{ inputs.package-name }}|${{ hashFiles('.relenv/**/*.xz') }}
-
-    - name: Create Onedir Directory
-      shell: bash
-      if: steps.onedir-pkg-cache.outputs.cache-hit != 'true'
-      run: |
-        python3 -c "import os; os.makedirs('artifacts', exist_ok=True)"
-        python3 -m relenv create --arch=${{ inputs.arch }} artifacts/${{ inputs.package-name }}
+        key: relenv|${{ env.RELENV_VERSION }}|pkg|${{ inputs.package-name }}|${{ hashFiles('.relenv/**/*.xz', 'requirements/static/pkg/**/*.txt') }}
 
     - name: Install Salt Into Onedir
       env:

@@ -19,7 +19,18 @@ jobs:
       - ${{ matrix.arch }}
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-onedir-pkg
+      - name: Setup Relenv
+        uses: ./.github/actions/setup-relenv
+        with:
+          platform: linux
+          arch: ${{ matrix.arch }}
+      - name: Setup Bare Relenv Onedir
+        uses: ./.github/actions/build-onedir-bare
+        with:
+          platform: linux
+          arch: ${{ matrix.arch }}
+      - name: Install Salt into Relenv Onedir
+        uses: ./.github/actions/build-onedir-pkg
         with:
           platform: linux
           arch: ${{ matrix.arch }}
@@ -52,7 +63,18 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
+      - name: Setup Relenv
+        uses: ./.github/actions/setup-relenv
+        with:
+          platform: windows
+          arch: ${{ matrix.arch }}
+      - name: Setup Bare Relenv Onedir
+        uses: ./.github/actions/build-onedir-bare
+        with:
+          platform: windows
+          arch: ${{ matrix.arch }}
+      - name: Install Salt into Relenv Onedir
+        uses: ./.github/actions/build-onedir-pkg
         with:
           platform: windows
           arch: ${{ matrix.arch }}
@@ -85,7 +107,18 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      - uses: ./.github/actions/build-onedir-pkg
+      - name: Setup Relenv
+        uses: ./.github/actions/setup-relenv
+        with:
+          platform: darwin
+          arch: ${{ matrix.arch }}
+      - name: Setup Bare Relenv Onedir
+        uses: ./.github/actions/build-onedir-bare
+        with:
+          platform: darwin
+          arch: ${{ matrix.arch }}
+      - name: Install Salt into Relenv Onedir
+        uses: ./.github/actions/build-onedir-pkg
         with:
           platform: darwin
           arch: ${{ matrix.arch }}

@@ -70,7 +70,7 @@ IS_WINDOWS = sys.platform.lower().startswith("win")
 IS_FREEBSD = sys.platform.lower().startswith("freebsd")
 ONEDIR_ARTIFACT_PATH = ARTIFACTS_DIR / "salt"
 if IS_WINDOWS:
-    ONEDIR_PYTHON_PATH = ONEDIR_ARTIFACT_PATH / "Scripts" / "python"
+    ONEDIR_PYTHON_PATH = ONEDIR_ARTIFACT_PATH / "Scripts" / "python.exe"
 else:
     ONEDIR_PYTHON_PATH = ONEDIR_ARTIFACT_PATH / "bin" / "python3"
 # Python versions to run against

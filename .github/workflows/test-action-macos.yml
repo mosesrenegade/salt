@@ -92,7 +92,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
-          path: artifacts/${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+          path: artifacts/
 
       - name: Decompress Onedir Tarball
         shell: bash
@@ -190,7 +190,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
-          path: artifacts/${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+          path: artifacts/
 
       - name: Decompress Onedir Tarball
         shell: bash

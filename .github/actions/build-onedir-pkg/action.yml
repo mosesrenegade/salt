@@ -32,11 +32,38 @@ runs:
       uses: actions/cache@v3
       with:
         path: .pip-download-cache
-        key: pip-download-cache|${{ env.RELENV_VERSION }}|${{ inputs.platform }}|${{ inputs.arch }}|${{ inputs.package-name }}|${{ hashFiles('.relenv/**/*.xz', 'requirements/static/pkg/*/*.txt') }}
+        key: pip-download-cache|${{ env.RELENV_VERSION }}|salt|${{ inputs.platform }}|${{ inputs.arch }}|${{ inputs.package-name }}|${{ hashFiles('.relenv/**/*.xz', 'requirements/static/pkg/*/*.txt') }}
+
+    - name: Download Salt Onedir Package Dependencies
+      env:
+        USE_STATIC_REQUIREMENTS: "1"
+        PIP_DOWNLOAD_CACHE: .pip-download-cache
+        PIP_INDEX_URL: https://pypi-proxy.saltstack.net/root/local/+simple/
+        PIP_EXTRA_INDEX_URL: https://pypi.org/simple
+      shell: bash
+      run: |
+        python3 -c "import os; os.makedirs('.downloaded-dependencies', exist_ok=True)"
+        if [ "${{ inputs.platform }}" != "windows" ]; then
+          artifacts/${{ inputs.package-name }}/bin/python3 -m pip download --dest .downloaded-dependencies .
+        else
+          artifacts/${{ inputs.package-name }}/Scripts/python -m pip download --dest .downloaded-dependencies .
+        fi
+
+    - name: Install Salt Onedir Package Dependencies
+      env:
+        PIP_DOWNLOAD_CACHE: .pip-download-cache
+        PIP_INDEX_URL: https://pypi-proxy.saltstack.net/root/local/+simple/
+        PIP_EXTRA_INDEX_URL: https://pypi.org/simple
+      shell: bash
+      run: |
+        if [ "${{ inputs.platform }}" != "windows" ]; then
+          artifacts/${{ inputs.package-name }}/bin/python3 -m pip install .downloaded-dependencies/*
+        else
+          artifacts/${{ inputs.package-name }}/Scripts/python -m pip install .downloaded-dependencies/*
+        fi
 
     - name: Install Salt Into Onedir
       env:
-        USE_STATIC_REQUIREMENTS: "1"
         PIP_DOWNLOAD_CACHE: .pip-download-cache
         PIP_INDEX_URL: https://pypi-proxy.saltstack.net/root/local/+simple/
         PIP_EXTRA_INDEX_URL: https://pypi.org/simple

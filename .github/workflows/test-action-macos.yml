@@ -88,25 +88,27 @@ jobs:
       - name: Checkout Source Code
         uses: actions/checkout@v3
 
-      - name: Download Onedir Tarball as an Artifact
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
-          path: artifacts/
-
-      - name: Decompress Onedir Tarball
-        shell: bash
-        run: |
-          python3 -c "import os; os.makedirs('artifacts', exist_ok=True)"
-          cd artifacts
-          tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
-
       - name: Cache nox.${{ inputs.distro-slug }}.tar.* for session ${{ inputs.nox-session }}
         id: nox-dependencies-cache
         uses: actions/cache@v3
         with:
           path: nox.${{ inputs.distro-slug }}.tar.*
           key: testrun-deps|${{ inputs.distro-slug }}|${{ inputs.nox-session }}|${{ matrix.transport }}|${{ inputs.python-version }}|${{ hashFiles('requirements/**/*.txt') }}
+
+      - name: Download Onedir Tarball as an Artifact
+        if: steps.nox-dependencies-cache.outputs.cache-hit != 'true'
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+          path: artifacts/
+
+      - name: Decompress Onedir Tarball
+        if: steps.nox-dependencies-cache.outputs.cache-hit != 'true'
+        shell: bash
+        run: |
+          python3 -c "import os; os.makedirs('artifacts', exist_ok=True)"
+          cd artifacts
+          tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 
       # Skip jobs if nox.*.tar.* is already cached
       - name: Set up Python ${{ inputs.python-version }}

@@ -94,8 +94,6 @@ jobs:
         shell: bash
         run: |
           python3 -c "import os; os.makedirs('artifacts', exist_ok=True)"
-          tree -a artifacts
-          ls -lah artifacts
           cd artifacts
           tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 

@@ -79,8 +79,6 @@ _PYTHON_VERSIONS = ("3", "3.5", "3.6", "3.7", "3.8", "3.9", "3.10")
 # Nox options
 #  Reuse existing virtualenvs
 nox.options.reuse_existing_virtualenvs = True
-#  Don't fail on missing interpreters
-nox.options.error_on_missing_interpreters = False
 
 # Change current directory to REPO_ROOT
 os.chdir(str(REPO_ROOT))

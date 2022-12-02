@@ -198,12 +198,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
-          path: artifacts/${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
+          path: artifacts/
 
       - name: Decompress Onedir Tarball
         shell: bash
         run: |
           python3 -c "import os; os.makedirs('artifacts', exist_ok=True)"
+          cd artifacts
           tar xvf ${{ inputs.package-name }}-${{ inputs.arch }}-${{ inputs.platform }}.tar.xz
 
       - name: Download cached nox.${{ inputs.distro-slug }}.tar.* for session ${{ inputs.nox-session }}

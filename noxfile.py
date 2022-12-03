@@ -362,6 +362,8 @@ def _run_with_coverage(session, *test_cmd, env=None):
     if env is None:
         env = {}
 
+    coverage_base_env = {}
+
     sitecustomize_dir = session.run(
         "salt-factories", "--coverage", silent=True, log=True, stderr=None
     )
@@ -387,11 +389,9 @@ def _run_with_coverage(session, *test_cmd, env=None):
             python_path_entries.insert(0, sitecustomize_dir)
             python_path_env_var = os.pathsep.join(python_path_entries)
 
-        coverage_base_env = {
-            # The full path to the .coverage data file. Makes sure we always write
-            # them to the same directory
-            "COVERAGE_FILE": COVERAGE_FILE,
-        }
+        # The full path to the .coverage data file. Makes sure we always write
+        # them to the same directory
+        coverage_base_env["COVERAGE_FILE"] = COVERAGE_FILE
 
         env.update(
             {
